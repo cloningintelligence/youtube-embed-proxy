@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         body {
-            background: #000;
+            background: #1a1a1a;
             overflow: hidden;
         }
         #player-container {
@@ -20,15 +20,28 @@
             left: 0;
             width: 100vw;
             height: 100vh;
+            background: #000;
         }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
+        }
+        #debug {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(255,0,0,0.8);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            z-index: 9999;
         }
     </style>
 </head>
 <body>
+    <div id="debug">Loading...</div>
     <div id="player-container">
         <iframe id="youtube-player" 
                 allowfullscreen
@@ -41,10 +54,25 @@
         const urlParams = new URLSearchParams(window.location.search);
         const videoId = urlParams.get('v');
         
+        const debugEl = document.getElementById('debug');
+        
         if (videoId) {
+            debugEl.textContent = `Video ID: ${videoId}`;
             const iframe = document.getElementById('youtube-player');
             // Use nocookie domain and enable API for better embedding support
-            iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0&enablejsapi=1&origin=https://cloningintelligence.github.io`;
+            const embedSrc = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0&enablejsapi=1&origin=https://cloningintelligence.github.io`;
+            iframe.src = embedSrc;
+            
+            iframe.onload = () => {
+                debugEl.textContent = `Loaded: ${videoId}`;
+                setTimeout(() => debugEl.style.display = 'none', 2000);
+            };
+            
+            iframe.onerror = () => {
+                debugEl.textContent = `Error loading video: ${videoId}`;
+            };
+        } else {
+            debugEl.textContent = 'No video ID provided';
         }
     </script>
 </body>
