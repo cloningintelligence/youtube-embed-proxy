@@ -43,7 +43,8 @@
         
         if (videoId) {
             const iframe = document.getElementById('youtube-player');
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0`;
+            // Use nocookie domain and enable API for better embedding support
+            iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0&enablejsapi=1&origin=https://cloningintelligence.github.io`;
         }
     </script>
 </body>
